@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>샐러디 가맹점 비상연락망</title>
+<style>
+  /* 폰트: 시스템 한글폰트 우선 사용 (오프라인 완전 지원) */
+  @font-face {
+    font-family: 'DM Mono';
+    src: local('Courier New'), local('Courier');
+    font-weight: 400 500;
+  }
+</style>
+<style>
+  :root {
+    --g1: #1B4332;
+    --g2: #2D6A4F;
+    --g3: #40916C;
+    --g4: #74C69D;
+    --g5: #D8F3DC;
+    --g6: #F0FAF4;
+    --red: #E63946;
+    --red-pale: #FFF0F0;
+    --orange: #F4A261;
+    --orange-pale: #FFF6EE;
+    --yellow: #FFD166;
+    --yellow-pale: #FFFBEE;
+    --blue: #4361EE;
+    --blue-pale: #EEF2FF;
+    --white: #FFFFFF;
+    --ink: #1A2820;
+    --ink2: #3D4F47;
+    --border: #E2EDE7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--g6);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--g1) 0%, var(--g2) 60%, var(--g3) 100%);
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.9);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    color: #fff;
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.65);
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 36px 0 14px;
+  }
+  .section-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-title h2 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--g1);
+    letter-spacing: -0.01em;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1.5px;
+    background: var(--border);
+    margin-left: 6px;
+  }
+
+  /* ── CARD BASE ── */
+  .card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(45,106,79,0.07);
+  }
+
+  /* ── 배달 플랫폼 고객센터 ── */
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .platform-item {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: box-shadow 0.2s, transform 0.15s;
+  }
+  .platform-item:hover {
+    box-shadow: 0 6px 20px rgba(45,106,79,0.12);
+    transform: translateY(-2px);
+  }
+  .platform-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .platform-emoji {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .platform-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .platform-hours {
+    font-size: 10.5px;
+    color: #888;
+    margin-top: 2px;
+  }
+  .platform-tel {
+    font-family: 'Courier New', 'D2Coding', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--g2);
+    letter-spacing: 0.02em;
+  }
+  .tel-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tel-link:hover .platform-tel { color: var(--g1); text-decoration: underline; }
+
+  /* ── A/S 테이블 ── */
+  .as-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .as-table thead tr {
+    background: var(--g2);
+  }
+  .as-table thead th {
+    padding: 12px 16px;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-align: left;
+  }
+  .as-table thead th:first-child { border-radius: 0; }
+  .as-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+  .as-table tbody tr:hover { background: var(--g6); }
+  .as-table tbody tr:last-child { border-bottom: none; }
+  .as-table td {
+    padding: 12px 16px;
+    vertical-align: middle;
+    color: var(--ink2);
+  }
+  .as-table td:first-child {
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .as-table td:nth-child(2) { color: #555; }
+  .as-table td:nth-child(3) {
+    font-family: 'Courier New', 'D2Coding', monospace;
+    font-size: 13px;
+    color: var(--g2);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  /* 항목 카테고리 구분 행 */
+  .cat-row td {
+    background: var(--g6) !important;
+    color: var(--g3) !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em;
+    padding: 7px 16px !important;
+    border-top: 1.5px solid var(--border) !important;
+  }
+
+  /* ── 링크 모음 ── */
+  .link-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .link-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: all 0.15s;
+  }
+  .link-item:hover {
+    border-color: var(--g3);
+    background: var(--g6);
+    box-shadow: 0 4px 14px rgba(45,106,79,0.1);
+    transform: translateY(-1px);
+  }
+  .link-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    background: var(--g5);
+  }
+  .link-info {}
+  .link-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .link-url {
+    font-size: 10.5px;
+    color: var(--g3);
+    font-family: 'Courier New', 'D2Coding', monospace;
+    margin-top: 2px;
+    word-break: break-all;
+  }
+  .link-arrow {
+    margin-left: auto;
+    color: var(--border);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .link-item:hover .link-arrow { color: var(--g3); }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    color: #aaa;
+    font-size: 11px;
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 20px; }
+    .platform-grid { grid-template-columns: 1fr 1fr; }
+    .link-grid { grid-template-columns: 1fr; }
+    .as-table { font-size: 12px; }
+    .as-table td, .as-table th { padding: 9px 10px; }
+    .platform-tel { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">🥗 SALADY 가맹점</div>
+  <h1>비상연락망 & 필수 링크</h1>
+  <p>매장 운영 중 급하게 필요한 연락처와 링크를 한 곳에 정리했습니다</p>
+</div>
+
+<div class="container">
+
+  <!-- ① 플랫폼 고객센터 -->
+  <div class="section-title">
+    <div class="section-icon" style="background:#FFF0F5;">🚨</div>
+    <h2>플랫폼 고객센터</h2>
+  </div>
+
+  <div class="platform-grid">
+
+    <div class="platform-item">
+      <div class="platform-header">
+        <div class="platform-emoji" style="background:#F5F5F5;">🖥️</div>
+        <div>
+          <div class="platform-name">경일정보 (포스 문제 시)</div>
+          <div class="platform-hours">포스 오류 즉시 연락</div>
+        </div>
+      </div>
+      <div class="platform-tel">1833-3473</div>
+    </div>
+
+    <div class="platform-item">
+      <div class="platform-header">
+        <div class="platform-emoji" style="background:#E8F5E9;">🟢</div>
+        <div>
+          <div class="platform-name">배달의민족</div>
+          <div class="platform-hours">고객센터 운영시간</div>
+        </div>
+      </div>
+      <div class="platform-tel">1600-0987</div>
+    </div>
+
+    <div class="platform-item">
+      <div class="platform-header">
+        <div class="platform-emoji" style="background:#FFF3E0;">🟡</div>
+        <div>
+          <div class="platform-name">쿠팡이츠 사장님사이트</div>
+          <div class="platform-hours">24시간 운영</div>
+        </div>
+      </div>
+      <div class="platform-tel">1670-9827</div>
+    </div>
+
+    <div class="platform-item">
+      <div class="platform-header">
+        <div class="platform-emoji" style="background:#FCE4EC;">🔴</div>
+        <div>
+          <div class="platform-name">요기요</div>
+          <div class="platform-hours">24시간 연중무휴</div>
+        </div>
+      </div>
+      <div class="platform-tel">1661-5270</div>
+    </div>
+
+    <div class="platform-item">
+      <div class="platform-header">
+        <div class="platform-emoji" style="background:#EDE7F6;">🟣</div>
+        <div>
+          <div class="platform-name">땡겨요</div>
+          <div class="platform-hours">평일 운영</div>
+        </div>
+      </div>
+      <div class="platform-tel">1661-5489</div>
+    </div>
+
+    <div class="platform-item">
+      <div class="platform-header">
+        <div class="platform-emoji" style="background:#E3F2FD;">🔵</div>
+        <div>
+          <div class="platform-name">배달특급 (가맹점주)</div>
+          <div class="platform-hours">매일 10:00 ~ 22:00</div>
+        </div>
+      </div>
+      <div class="platform-tel">1599-9836</div>
+    </div>
+
+    <div class="platform-item">
+      <div class="platform-header">
+        <div class="platform-emoji" style="background:#E8F5E9;">📦</div>
+        <div>
+          <div class="platform-name">동원홈푸드</div>
+          <div class="platform-hours">
+            월~금 08:30~22:00 (점심 12:00~13:00 / 저녁 17:30~19:00)<br>
+            토 08:30~18:00 (점심 13:00~14:00)<br>
+            일 15:00~22:00 (저녁 17:30~19:00)
+          </div>
+        </div>
+      </div>
+      <div class="platform-tel">1588-8658</div>
+    </div>
+
+  </div>
+
+  <!-- ② 주방기기 A/S 연락처 -->
+  <div class="section-title" style="margin-top:44px;">
+    <div class="section-icon" style="background:#FFF3E0;">🔧</div>
+    <h2>주방기기 A/S 연락처</h2>
+  </div>
+
+  <div class="card">
+    <table class="as-table">
+      <thead>
+        <tr>
+          <th>항목</th>
+          <th>제조사 / 업체</th>
+          <th>A/S 전화번호</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="cat-row"><td colspan="3">냉 장 고</td></tr>
+        <tr><td>냉장고</td><td>유니크</td><td>1588-9269</td></tr>
+        <tr><td>냉장고</td><td>라셀르</td><td>1588-6541</td></tr>
+        <tr><td>냉장고 (테이블형)</td><td>싱싱나리</td><td>02-2238-4411~2</td></tr>
+        <tr><td>냉장고 (쇼케이스)</td><td>세경냉동</td><td>031-572-3574~5 / 080-000-7858</td></tr>
+        <tr><td>토핑냉장고</td><td>부성에버레스트</td><td>080-080-8711</td></tr>
+
+        <tr class="cat-row"><td colspan="3">제 빙 기</td></tr>
+        <tr><td>제빙기</td><td>아이스트로 제티스</td><td>1544-8149</td></tr>
+        <tr><td>제빙기</td><td>카이저</td><td>1588-5396</td></tr>
+
+        <tr class="cat-row"><td colspan="3">온 / 정 수 기</td></tr>
+        <tr><td>온/정수기</td><td>딜리코</td><td>010-5669-2002</td></tr>
+        <tr><td>온/정수기</td><td>나이스</td><td>010-5669-2002</td></tr>
+
+        <tr class="cat-row"><td colspan="3">조 리 기 기</td></tr>
+        <tr><td>데크오븐</td><td>팬텀코리아</td><td>02-3426-7724</td></tr>
+        <tr><td>퀴오븐</td><td>디포</td><td>1555-5098</td></tr>
+        <tr><td>전기밥솥</td><td>쿠첸</td><td>1577-2797</td></tr>
+        <tr><td>인덕션</td><td>웰치</td><td>1566-5322 / 1899-9213</td></tr>
+        <tr><td>전기온수기</td><td>린나이 (수도권 한정)</td><td>1544-3651</td></tr>
+        <tr><td>커피머신/핫워터</td><td>써맛</td><td>010-5669-2002</td></tr>
+
+        <tr class="cat-row"><td colspan="3">기 타</td></tr>
+        <tr><td>초음파식세기</td><td>웨이비아</td><td>1577-1856</td></tr>
+        <tr><td>셋톱박스</td><td>파노리아</td><td>010-3929-1636</td></tr>
+        <tr><td>DID모니터</td><td>스마트플렛 (319점 부산종합운동장역점까지)</td><td>02-577-0177</td></tr>
+        <tr><td>DID모니터</td><td>도연/커머스랩/톰미디어 (320호점~현재)</td><td>각 제조사에 A/S 문의</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ③ 필수 사이트 링크 모음 -->
+  <div class="section-title" style="margin-top:44px;">
+    <div class="section-icon" style="background:#EEF2FF;">🔗</div>
+    <h2>필수 사이트 링크 모음</h2>
+  </div>
+
+  <div class="link-grid">
+
+    <a href="https://storesalady.com/" target="_blank" class="link-item">
+      <div class="link-icon">🥗</div>
+      <div class="link-info">
+        <div class="link-name">샐러디 점주용 홈페이지</div>
+        <div class="link-url">storesalady.com</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
+
+    <a href="https://hffg.dwhf.co.kr/?w2xPath=/cm/main/Login3.xml" target="_blank" class="link-item">
+      <div class="link-icon">📦</div>
+      <div class="link-info">
+        <div class="link-name">동원홈푸드 발주</div>
+        <div class="link-url">hffg.dwhf.co.kr</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
+
+    <a href="https://partner.payco.kr/user/login" target="_blank" class="link-item">
+      <div class="link-icon">📱</div>
+      <div class="link-info">
+        <div class="link-name">스마트오더 사장님사이트</div>
+        <div class="link-url">partner.payco.kr</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
+
+    <a href="http://ceo.baemin.com" target="_blank" class="link-item">
+      <div class="link-icon">🟢</div>
+      <div class="link-info">
+        <div class="link-name">배달의민족 사장님사이트</div>
+        <div class="link-url">ceo.baemin.com</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
+
+    <a href="https://ceo.yogiyo.co.kr/" target="_blank" class="link-item">
+      <div class="link-icon">🔴</div>
+      <div class="link-info">
+        <div class="link-name">요기요 사장님사이트</div>
+        <div class="link-url">ceo.yogiyo.co.kr</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
+
+    <a href="https://store.coupangeats.com/merchant/login" target="_blank" class="link-item">
+      <div class="link-icon">🟡</div>
+      <div class="link-info">
+        <div class="link-name">쿠팡이츠 사장님사이트</div>
+        <div class="link-url">store.coupangeats.com</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
+
+    <a href="https://easybooking.naver.com/" target="_blank" class="link-item">
+      <div class="link-icon">🟩</div>
+      <div class="link-info">
+        <div class="link-name">네이버 바로주문</div>
+        <div class="link-url">easybooking.naver.com</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
+
+    <a href="https://fcdaum.com/home" target="_blank" class="link-item">
+      <div class="link-icon">🍽️</div>
+      <div class="link-info">
+        <div class="link-name">외식인</div>
+        <div class="link-url">fcdaum.com/home</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
+
+    <a href="https://www.toorder.co.kr/" target="_blank" class="link-item">
+      <div class="link-icon">📊</div>
+      <div class="link-info">
+        <div class="link-name">토더</div>
+        <div class="link-url">toorder.co.kr</div>
+      </div>
+      <div class="link-arrow">›</div>
+    </a>
+
+  </div>
+
+  <div class="footer">
+    샐러디 가맹관리팀 | 문의사항은 담당 SV에게 연락해주세요
+  </div>
+
+</div>
+</body>
+</html>
